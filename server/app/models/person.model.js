@@ -12,7 +12,7 @@ const Person = (person) => {
 Person.create = (newPerson, result) => {
 	sql.query("INSERT INTO persons SET ?", newPerson, (err, res) => {
 		if (err) {
-			console.log("create error: ", err);
+			console.log("error: ", err);
 			result(err, null);
 			return;
 		}
@@ -25,7 +25,7 @@ Person.create = (newPerson, result) => {
 Person.findById = (id, result) => {
 	sql.query(`SELECT * FROM persons WHERE id = ${id}`, (err, res) => {
 		if (err) {
-			console.log("findById error: ", err);
+			console.log("error: ", err);
 			result(err, null);
 			return;
 		}
@@ -44,7 +44,7 @@ Person.getAll = (name, result) => {
 
 	sql.query(query, (err, res) => {
 		if (err) {
-			console.log('getAll error: ', err);
+			console.log("error: ", err);
 			result(null, err);
 			return;
 		}
@@ -54,10 +54,23 @@ Person.getAll = (name, result) => {
 	});
 };
 
+Person.getAllHaveContacts = (result) => {
+	sql.query("SELECT * FROM persons WHERE have_contact=true", (err, res) => {
+		if (err) {
+			console.log("error: ", err);
+			result(null, err);
+			return;
+		}
+
+		console.log("persons: ", res);
+		return(null, res);
+	});
+};
+
 Person.updateById = (id, person, result) => {
 	sql.query("UPDATE persons SET name = ?, temperature = ?, symptom = ?, have_contact = ? WHERE id = ?", [person.name, person.temperature, person.symptom, person.have_contact], (err, res) => {
 		if (err) {
-			console.log("updateById error: ", err);
+			console.log("error: ", err);
 			result(null, err);
 			return;
 		}
@@ -76,7 +89,7 @@ Person.updateById = (id, person, result) => {
 Person.remove = (id, result) => {
 	sql.query("DELETE FROM persons WHERE id = ?", id, (err, res) => {
 		if (err) {
-			console.log("remove error: ", err);
+			console.log("error: ", err);
 			result(null, err);
 			return;
 		}
@@ -95,7 +108,7 @@ Person.remove = (id, result) => {
 Person.removeAll = (result) => {
 	sql.query("DELETE FROM persons", (err, res) => {
 		if (err) {
-			console.log("removeAll error: ", err);
+			console.log("error: ", err);
 			result(null, err);
 			return;
 		}
