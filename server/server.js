@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to Health Care application." });
 });
 
-require("./app/routes/person.routes.js")(app);
+require("./app/routes/declaration.js")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

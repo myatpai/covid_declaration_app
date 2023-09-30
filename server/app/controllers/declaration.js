@@ -1,6 +1,6 @@
-const Person = require("../models/person.model.js");
+const Declaration = require("../models/declaration.js");
 
-// Create and Save new Person
+// Create and Save new Declaration
 exports.create = (req, res) => {
 	// Validate request
 	if (req.body) {
@@ -9,28 +9,28 @@ exports.create = (req, res) => {
 		});
 	}
 
-	// Create a Person
-	const person = new Person({
+	// Create a Declaration
+	const Declaration = new Declaration({
 		name: req.body.name,
 		temperature: req.body.temperature,
-		symptom: req.body.symptom,
+		symptoms: req.body.symptoms,
 		has_contact: req.body.has_contact || false
 	});
 
-	// Save Person int the database
-	Person.create(person, (err, data) => {
+	// Save Declaration int the database
+	Declaration.create(declaration, (err, data) => {
 		if (err) res.status(500).send({
-			message: err.message || "Some error occured while creating the Person."
+			message: err.message || "Some error occured while creating the Declaration."
 		});
 		else res.send(data);
 	});
 };
 
-// Retrive all Persons from the database (with condition)
+// Retrive all Declarations from the database (with condition)
 exports.findAll = (req, res) => {
 	const name = req.query.title;
 
-	Person.getAll(name, (err, data) => {
+	Declaration.getAll(name, (err, data) => {
 		if (err) res.status(500).send({
 			message: err.message || "Some error occurred while retrieving data."
 		});
@@ -38,17 +38,17 @@ exports.findAll = (req, res) => {
 	});
 };
 
-//  Find a Person by id
+//  Find a Declaration by id
 exports.findOne = (req, res) => {
-	Person.findById(req.params.id, (err, data) => {
+	Declaration.findById(req.params.id, (err, data) => {
 		if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({
-					message: `Not found Person with id ${req.params.id}.`
+					message: `Not found Declaration with id ${req.params.id}.`
 				});
 			} else {
 				res.status(500).send({
-					message: `Error retriving Person with id ${req.params.id}`
+					message: `Error retriving Declaration with id ${req.params.id}`
 				});
 			}
 		} else {
@@ -58,8 +58,8 @@ exports.findOne = (req, res) => {
 };
 
 // find all people with contacts to COVID-19 patients
-exports.findAllHaveContacts = (req, res) => {
-	Person.getAllHaveContacts((err, data) => {
+exports.findAllHaveContact = (req, res) => {
+	Declaration.getAllHaveContact((err, data) => {
 		if (err) res.status(500).send({
 			message: err.message || "Some error occurred while retriveing data."
 		});
@@ -67,7 +67,7 @@ exports.findAllHaveContacts = (req, res) => {
 	});
 };
 
-//Update a Person identified by the id in the request
+//Update a Declaration identified by the id in the request
 exports.update = (req, res) => {
 	// Validate request
 	if (!req.body) {
@@ -78,15 +78,15 @@ exports.update = (req, res) => {
 
 	console.log(req.body);
 
-	Person.updateById(req.params.id, new Person(req.body), (err, data) => {
+	Declaration.updateById(req.params.id, new Declaration(req.body), (err, data) => {
 		if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({
-					message: `Not found Person with id ${rew.params,id}`
+					message: `Not found Declaration with id ${rew.params,id}`
 				});
 			} else {
 				res.status(500).send({
-					message: `Error updating the Person with id ${req.params.id}`
+					message: `Error updating the Declaration with id ${req.params.id}`
 				});
 			}
 		} else {
@@ -95,30 +95,30 @@ exports.update = (req, res) => {
 	});
 };
 
-// Delete a Person with the specific id in the request
+// Delete a Declaration with the specific id in the request
 exports.delete = (req, res) => {
-	Person.remove(req.params.id, (err, data) => {
+	Declaration.remove(req.params.id, (err, data) => {
 		if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({
-					message: `Not found Person with id ${req.params.id}`
+					message: `Not found Declaration with id ${req.params.id}`
 				});
 			} else {
 				res.status(500).send({
-					message: `Could not delete Person with id ${req.params.id}`
+					message: `Could not delete Declaration with id ${req.params.id}`
 				});
 			}
 		} else {
 			res.send({ 
-				message: `Person was deleted successfully!`
+				message: `Declaration was deleted successfully!`
 			});
 		}
 	});
 };
 
-// Delete all Persons from the database
+// Delete all Declarations from the database
 exports.deleteAll = (req, res) => {
-	Person.removeAll((err, data) => {
+	Declaration.removeAll((err, data) => {
 		if (err) res.status(500).send({
 			message: err.message || "Some error ocurred while removing data."
 		});

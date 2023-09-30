@@ -22,7 +22,7 @@ export function register(config) {
 }
 
 const registerValidSW = (swUrl, config) => {
-  navigator.serviceWorker.register(swUrl, undefined).then(registration => {
+  navigator.serviceWorker.register(swUrl).then(registration => {
     registration.onupdatefound = () => {
       const installingWorker = registration.installing;
       if (installingWorker == null) return;
@@ -40,8 +40,7 @@ const registerValidSW = (swUrl, config) => {
         }
       };
     };
-  })
-  .catch(error => {
+  }).catch(error => {
     console.error('Error during service worker registration:', error);
   });
 };
@@ -60,8 +59,7 @@ const checkValidServiceWorker = (swUrl, config) => {
     } else {
       registerValidSW(swUrl, config);
     }
-  })
-  .catch(() => {
+  }).catch(() => {
     console.log('No internet connection found. App is running in offline mode.');
   });
 }
