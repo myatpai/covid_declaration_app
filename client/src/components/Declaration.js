@@ -73,9 +73,9 @@ const Declaration = props => {
   };
 
   return (
-    <div>
+    <div className="container p-5">
       {currentDeclaration ? (
-        <div className="edit-form">
+        <div className="row g-3 align-items-center">
           <h4>Declaration</h4>
           <form>
             <div className="form-group">

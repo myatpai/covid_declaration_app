@@ -2,15 +2,16 @@ const sql = require("./db.js");
 
 // constructor
 // Name, Temperature, Do you have any of the following symptoms now or within the last 14 days: Cough, smell/test impairment, fever, breathing difficulties, body aches, headaches, fatigue, sore throat, diarrhea, runny nose(even if your symptoms are mild)?, Have you been in contact with anyone who is suspected to have/ has been diagnosed with Covid-19 within the last 14 days?
-const Declaration = (declaration) => {
+const Declaration = function(declaration) {
 	this.name = declaration.name;
 	this.temperature = declaration.temperature;
-	this.symptom = declaration.symptom;
-	this.have_contact = declaration.have_contact;
+	this.symptoms = declaration.symptoms;
+	this.has_contact = declaration.has_contact;
 };
 
 Declaration.create = (newDeclaration, result) => {
-	sql.query("INSERT INTO persons SET ?", newDeclaration, (err, res) => {
+	console.log("newDec", newDeclaration);
+	sql.query("INSERT INTO declarations SET ?", newDeclaration, (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(err, null);
@@ -23,7 +24,7 @@ Declaration.create = (newDeclaration, result) => {
 };
 
 Declaration.findById = (id, result) => {
-	sql.query(`SELECT * FROM persons WHERE id = ${id}`, (err, res) => {
+	sql.query(`SELECT * FROM declarations WHERE id = ${id}`, (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(err, null);
@@ -36,7 +37,7 @@ Declaration.findById = (id, result) => {
 };
 
 Declaration.getAll = (name, result) => {
-	let query = "SELECT * FROM persons";
+	let query = "SELECT * FROM declarations";
 
 	if (name) {
 		query += ` WHERE name = ${name}`;
@@ -49,26 +50,26 @@ Declaration.getAll = (name, result) => {
 			return;
 		}
 
-		console.log("persons: ", res);
+		console.log("declarations: ", res);
 		result(null, res);
 	});
 };
 
 Declaration.getAllHaveContact = (result) => {
-	sql.query("SELECT * FROM persons WHERE have_contact=true", (err, res) => {
+	sql.query("SELECT * FROM declarations WHERE has_contact=true", (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(null, err);
 			return;
 		}
 
-		console.log("persons: ", res);
+		console.log("declarations: ", res);
 		return(null, res);
 	});
 };
 
 Declaration.updateById = (id, declaration, result) => {
-	sql.query("UPDATE persons SET name = ?, temperature = ?, symptom = ?, have_contact = ? WHERE id = ?", [declaration.name, declaration.temperature, declaration.symptom, declaration.have_contact], (err, res) => {
+	sql.query("UPDATE declarations SET name = ?, temperature = ?, symptom = ?, has_contact = ? WHERE id = ?", [declaration.name, declaration.temperature, declaration.symptom, declaration.has_contact], (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(null, err);
@@ -87,7 +88,7 @@ Declaration.updateById = (id, declaration, result) => {
 };
 
 Declaration.remove = (id, result) => {
-	sql.query("DELETE FROM persons WHERE id = ?", id, (err, res) => {
+	sql.query("DELETE FROM declarations WHERE id = ?", id, (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(null, err);
@@ -106,14 +107,14 @@ Declaration.remove = (id, result) => {
 };
 
 Declaration.removeAll = (result) => {
-	sql.query("DELETE FROM persons", (err, res) => {
+	sql.query("DELETE FROM declarations", (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(null, err);
 			return;
 		}
 
-		console.log(`deleted ${res.affectedRows} persons`);
+		console.log(`deleted ${res.affectedRows} declarations`);
 		result(null, res);
 	});
 };

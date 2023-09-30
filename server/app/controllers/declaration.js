@@ -3,14 +3,14 @@ const Declaration = require("../models/declaration.js");
 // Create and Save new Declaration
 exports.create = (req, res) => {
 	// Validate request
-	if (req.body) {
+	if (!req.body) {
 		res.status(400).send({
-			message: "Content cannor be empty!"
+			message: "Content cannot be empty!"
 		});
 	}
 
 	// Create a Declaration
-	const Declaration = new Declaration({
+	const declaration = new Declaration({
 		name: req.body.name,
 		temperature: req.body.temperature,
 		symptoms: req.body.symptoms,

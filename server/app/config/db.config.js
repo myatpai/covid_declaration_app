@@ -1,6 +1,6 @@
 module.exports = {
   HOST: "localhost",
-  USER: "root",
+  USER: "myatpai",
   PASSWORD: "root",
-  DB: "declaration"
+  DB: "covid_declaration"
 };

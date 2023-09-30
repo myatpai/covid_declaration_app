@@ -33,10 +33,10 @@ const AddDeclaration = () => {
 		var data = {
 			name: declaration.name,
 			temperature: declaration.temperature,
-			symptoms: declaration.symptoms,
-			has_contact: declaration.has_contact
+			symptoms: declaration.symptoms.toString(),
+			has_contact: declaration.has_contact ? 1 : 0
 		};
-
+		console.log(data);
 		DeclarationDataService.create(data).then(response => {
 			setDeclaration({
 				id: declaration.data.id,
@@ -56,10 +56,10 @@ const AddDeclaration = () => {
 		setDeclaration(initialDeclarationState);
 	}
 
-	return (<div className="container">
+	return (<div className="container p-5">
 		{submitted ? (<div className="row g-3 align-items-center">
 			<h4>You submitted successfully!</h4>
-			<button className="btn btn-success" onClick={newDeclaration()}>Add</button>
+			<button className="btn btn-success" onClick={newDeclaration}>Add</button>
 		</div>) : (<div className="row g-3 align-items-center">
 			<div className="row mb-3">
 				<label className="col-sm-2 col-form-label" htmlFor="name">Name</label>
@@ -71,7 +71,7 @@ const AddDeclaration = () => {
 			<div className="row mb-3">
 				<label className="col-sm-2 col-form-label" htmlFor="temperature">Temperature</label>
 				<div className="col-sm-10">
-					<input className="form-control" type="number" id="temperature" name="temperature" value={declaration.temperature} onChange={handleInputChange} min="36" required />
+					<input className="form-control" type="number" id="temperature" name="temperature" value={declaration.temperature} onChange={handleInputChange} min="36" step="0.01" required />
 				</div>
 			</div>
 		
@@ -88,7 +88,7 @@ const AddDeclaration = () => {
 				<label className="form-check-label" htmlFor="has_contact">&nbsp;Have you been in contact with anyone who is suspected to have/ has been diagnosed with Covid-19 within the last 14 days?</label>
 			</div>
 
-			<button className="btn btn-success" onClick={saveDeclaration()}>Submit</button>
+			<button className="btn btn-success" onClick={saveDeclaration}>Submit</button>
 		</div>)}
 	</div>);
 }
