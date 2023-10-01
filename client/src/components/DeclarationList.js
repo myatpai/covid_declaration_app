@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from "react";
-import DeclarationDataService from "../services/DeclarationDataService";
 import { Link } from "react-router-dom";
+
+import DeclarationDataService from "../services/DeclarationDataService";
 
 const DeclarationList = () => {
   const [declarations, setDeclarations] = useState([]);
-  const [currentDeclaration, setCurrentDeclaration] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(-1);
-  const [searchName, setSearchName] = useState("");
 
   useEffect(() => {
     retrieveDeclarations();
   }, []);
-
-  const onChangeSearchName = e => {
-    const searchName = e.target.value;
-    setSearchName(searchName);
-  };
 
   const retrieveDeclarations = () => {
     DeclarationDataService.getAll().then(response => {
@@ -26,101 +19,32 @@ const DeclarationList = () => {
     });
   };
 
-  const refreshList = () => {
-    retrieveDeclarations();
-    setCurrentDeclaration(null);
-    setCurrentIndex(-1);
-  };
-
-  const setActiveDeclaration = (declaration, index) => {
-    setCurrentDeclaration(declaration);
-    setCurrentIndex(index);
-  };
-
-  const removeAllDeclarations = () => {
-    DeclarationDataService.removeAll().then(response => {
-      console.log(response.data);
-      refreshList();
-    }).catch(e => {
-      console.log(e);
-    });
-  };
-
-  const findByName = () => {
-    DeclarationDataService.findByName(searchName).then(response => {
-      setDeclarations(response.data);
-      console.log(response.data);
-    })
-    .catch(e => {
-      console.log(e);
-    });
-  };
-
   return (
-    <div className="list row">
-      <div className="col-md-8">
-        <div className="input-group mb-3">
-          <input type="text" className="form-control" placeholder="Search by Name" value={searchName} onChange={onChangeSearchName}/>
-          <div className="input-group-append">
-            <button className="btn btn-outline-secondary" type="button" onClick={findByName}>
-              Search
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="col-md-6">
-        <h4>Declarations List</h4>
-
-        <ul className="list-group">
-          {declarations &&declarations.map((declaration, index) => (
-              <li className={"list-group-item " + (index === currentIndex ? "active" : "")} onClick={() => setActiveDeclaration(declaration, index)} key={index}>
-                {declaration.name}
-              </li>
-            ))}
-        </ul>
-
-        <button className="m-3 btn btn-sm btn-danger" onClick={removeAllDeclarations}>
-          Remove All
-        </button>
-      </div>
-      
-      <div className="col-md-6">
-        {currentDeclaration ? (
-          <div>
-            <h4>declaration</h4>
-            <div>
-              <label>
-                <strong>Name:</strong>
-              </label>{" "}
-              {currentDeclaration.Name}
-            </div>
-            <div>
-              <label>
-                <strong>Description:</strong>
-              </label>{" "}
-              {currentDeclaration.description}
-            </div>
-            <div>
-              <label>
-                <strong>Status:</strong>
-              </label>{" "}
-              {currentDeclaration.published ? "Published" : "Pending"}
-            </div>
-
-            <Link
-              to={"/declarations/" + currentDeclaration.id}
-              className="badge badge-warning"
-            >
-              Edit
-            </Link>
-          </div>
-        ) : (
-          <div>
-            <br />
-            <p>Please click on a declaration...</p>
-          </div>
-        )}
-      </div>
+    <div className="container p-3 list row">
+      <h4>Declarations</h4>
+      <table className="table">
+        <thead className="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Temperature</th>
+            <th scope="col">Symptoms</th>
+            <th scope="col">Has contact</th>
+          </tr>
+        </thead>
+        <tbody>
+        {declarations &&declarations.map((declaration, index) => (
+          <tr key={index}>
+            <th scope="row">{ declaration.id }</th>
+            <td>{ declaration.name }</td>
+            <td>{ declaration.temperature }</td>
+            <td>{ declaration.symptoms }</td>
+            <td>{ (declaration.has_contact === 1) ? 'Yes' : 'No' }</td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
+      <Link to={"/add"} className="m-3 btn col-2 btn-success"> Add Declaration </Link>
     </div>
   );
 };

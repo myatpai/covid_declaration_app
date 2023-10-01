@@ -31,6 +31,12 @@ Declaration.findById = (id, result) => {
 			return;
 		}
 
+		if (res.length) {
+			console.log("found declaration: ", res[0]);
+			result(null, res[0]);
+			return;
+		}
+
 		// not found Declaration with the id
 		result({ kind: "not_found" }, null);
 	});
@@ -51,70 +57,6 @@ Declaration.getAll = (name, result) => {
 		}
 
 		console.log("declarations: ", res);
-		result(null, res);
-	});
-};
-
-Declaration.getAllHaveContact = (result) => {
-	sql.query("SELECT * FROM declarations WHERE has_contact=true", (err, res) => {
-		if (err) {
-			console.log("error: ", err);
-			result(null, err);
-			return;
-		}
-
-		console.log("declarations: ", res);
-		return(null, res);
-	});
-};
-
-Declaration.updateById = (id, declaration, result) => {
-	sql.query("UPDATE declarations SET name = ?, temperature = ?, symptom = ?, has_contact = ? WHERE id = ?", [declaration.name, declaration.temperature, declaration.symptom, declaration.has_contact], (err, res) => {
-		if (err) {
-			console.log("error: ", err);
-			result(null, err);
-			return;
-		}
-
-		if (res.affectedRows == 0) {
-			// not found Declaration with the id
-			result({ kind: "not_found" }, null);
-			return;
-		}
-		
-		console.log("updated Declaration: ", { id: id, ...declaration });
-		result(null, { id: id, ...declaration });
-	});
-};
-
-Declaration.remove = (id, result) => {
-	sql.query("DELETE FROM declarations WHERE id = ?", id, (err, res) => {
-		if (err) {
-			console.log("error: ", err);
-			result(null, err);
-			return;
-		}
-
-		if (err.affectedRows == 0) {
-			// not found Declaration with the id
-			result({ kind: "not_found" }, null);
-			return;
-		}
-
-		console.log("deleted Declaration with id: ", id);
-		result(null, res);
-	});
-};
-
-Declaration.removeAll = (result) => {
-	sql.query("DELETE FROM declarations", (err, res) => {
-		if (err) {
-			console.log("error: ", err);
-			result(null, err);
-			return;
-		}
-
-		console.log(`deleted ${res.affectedRows} declarations`);
 		result(null, res);
 	});
 };

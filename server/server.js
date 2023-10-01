@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Health Care application." });
+  res.json({ message: "Welcome to COVID-19 Declaration Form application." });
 });
 
 require("./app/routes/declaration.js")(app);
